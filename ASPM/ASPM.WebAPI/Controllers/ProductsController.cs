@@ -20,21 +20,38 @@ namespace ASPM.WebAPI.Controllers
             return repo.Retrieve();
         }
 
-        // GET: api/Products/5
-        public string Get(int id)
+        public IEnumerable<Product> Get(string search)
         {
+            return repo.Retrieve().Where(p=>p.ProductCode.Contains(search));
+        }
 
-            return "Value";
+        // GET: api/Products/5
+        public Product Get(int id)
+        {
+            Product product;
+            if (id > 0)
+            {
+                product = repo.Retrieve().FirstOrDefault(p => p.ProductId == id);
+            }
+
+            else
+            {
+                product = repo.Create();
+            }
+            return product;
         }
 
         // POST: api/Products
-        public void Post([FromBody]string value)
+        public void Post([FromBody]Product product )
         {
+            var newProduct = repo.Save(product);
         }
 
         // PUT: api/Products/5
-        public void Put(int id, [FromBody]string value)
+        public void Put(int id, [FromBody]Product product)
         {
+            var updateProduct = repo.Save(id,product);
+
         }
 
         // DELETE: api/Products/5

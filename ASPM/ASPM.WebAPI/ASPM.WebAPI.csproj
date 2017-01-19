@@ -215,8 +215,8 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\Product.cs" />
-    <Compile Include="Controllers\ProductRepository.cs" />
+    <Compile Include="Models\Product.cs" />
+    <Compile Include="Models\ProductRepository.cs" />
     <Compile Include="Controllers\ProductsController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
