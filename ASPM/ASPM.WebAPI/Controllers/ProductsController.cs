@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Cors;
+using System.Web.Http.Description;
 
 namespace ASPM.WebAPI.Controllers
 {
@@ -14,10 +15,21 @@ namespace ASPM.WebAPI.Controllers
     {
 
         private ProductRepository repo = new ProductRepository();
-        // GET: api/Products
-        public IEnumerable<Product> Get()
+
+       
+        [ResponseType(typeof(Product))]
+        public IHttpActionResult Get()
         {
-            return repo.Retrieve();
+            try
+            {
+               
+                return Ok(repo.Retrieve().AsQueryable());
+
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
         }
 
         public IEnumerable<Product> Get(string search)
@@ -26,32 +38,88 @@ namespace ASPM.WebAPI.Controllers
         }
 
         // GET: api/Products/5
-        public Product Get(int id)
+        [ResponseType(typeof(Product))]
+        public IHttpActionResult Get(int id)
         {
-            Product product;
-            if (id > 0)
+            try
             {
-                product = repo.Retrieve().FirstOrDefault(p => p.ProductId == id);
+                Product product;
+                if (id > 0)
+                {
+                    var products = repo.Retrieve();
+                    product = products.FirstOrDefault(p => p.ProductId == id);
+                    if (product == null)
+                    {
+                        return NotFound();
+                    }
+                }
+                else
+                {
+                    product = repo.Create();
+                }
+                return Ok(product);
             }
-
-            else
+            catch (Exception ex)
             {
-                product = repo.Create();
+                return InternalServerError(ex);
             }
-            return product;
         }
 
         // POST: api/Products
-        public void Post([FromBody]Product product )
+        [ResponseType(typeof(Product))]
+        public IHttpActionResult Post([FromBody]Product product)
         {
-            var newProduct = repo.Save(product);
+            try
+            {
+                if (product == null)
+                {
+                    return BadRequest("Product cannot be null");
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                var newProduct = repo.Save(product);
+                if (newProduct == null)
+                {
+                    return Conflict();
+                }
+                return Created<Product>(Request.RequestUri + newProduct.ProductId.ToString(),
+                    newProduct);
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
         }
 
         // PUT: api/Products/5
-        public void Put(int id, [FromBody]Product product)
+        public IHttpActionResult Put(int id, [FromBody]Product product)
         {
-            var updateProduct = repo.Save(id,product);
+            try
+            {
+                if (product == null)
+                {
+                    return BadRequest("Product cannot be null");
+                }
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
 
+                var updatedProduct = repo.Save(id, product);
+                if (updatedProduct == null)
+                {
+                    return NotFound();
+                }
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
         }
 
         // DELETE: api/Products/5

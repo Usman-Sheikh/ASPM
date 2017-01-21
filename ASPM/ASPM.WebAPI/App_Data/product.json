@@ -94,5 +94,13 @@
     "ProductId": 12,
     "ProductName": "Macbook Air",
     "ReleaseDate": "2017-01-20T04:24:25.6786125+05:00"
+  },
+  {
+    "Description": "MackBook 13 Inch",
+    "Price": 0.0,
+    "ProductCode": "APL-0003",
+    "ProductId": 13,
+    "ProductName": "Macbook E",
+    "ReleaseDate": "2017-01-20T23:11:43.8467615+05:00"
   }
 ]
