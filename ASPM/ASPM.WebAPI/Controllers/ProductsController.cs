@@ -10,7 +10,7 @@ using System.Web.Http.Description;
 
 namespace ASPM.WebAPI.Controllers
 {
-    [EnableCors("http://localhost:60852", "*","*")]
+    
     public class ProductsController : ApiController
     {
 
@@ -37,6 +37,7 @@ namespace ASPM.WebAPI.Controllers
             return repo.Retrieve().Where(p=>p.ProductCode.Contains(search));
         }
 
+        [Authorize]
         // GET: api/Products/5
         [ResponseType(typeof(Product))]
         public IHttpActionResult Get(int id)

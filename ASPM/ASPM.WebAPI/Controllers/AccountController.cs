@@ -16,11 +16,14 @@ using Microsoft.Owin.Security.OAuth;
 using ASPM.WebAPI.Models;
 using ASPM.WebAPI.Providers;
 using ASPM.WebAPI.Results;
+using System.Web.Http.Cors;
 
 namespace ASPM.WebAPI.Controllers
+    
 {
     [Authorize]
     [RoutePrefix("api/Account")]
+
     public class AccountController : ApiController
     {
         private const string LocalLoginProvider = "Local";
